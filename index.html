@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>YoutD</title>
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
+    <link rel="stylesheet" href="css/resset.css">
+
+  </head>
+  <body class="container">
+
+    <br/>
+    <div class="row">
+      <div class="col-lg-6 col-sm-6">
+        <input type="text" class="form form-control" id="url"/>
+      </div>
+      
+    </div>    
+
+    <script>
+      
+      const video = require('./js/video.js')
+
+      window.onload = function(){
+        document.getElementById("url").onkeyup = function(){
+          video.videoInfo('CoPkEJ1spZs');
+        };
+      };
+    </script>
+  </body>
+</html>
