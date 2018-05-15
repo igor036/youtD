@@ -6,7 +6,6 @@
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="node_modules/jquery/dist/jquery.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
 
     <link rel="stylesheet" href="css/resset.css">
 
@@ -14,22 +13,31 @@
   <body class="container">
 
     <br/>
-    <div class="row">
+
+    <img src="./img/load.gif" id="load"/>
+
+    <div class="row" id="search">
       <div class="col-lg-6 col-sm-6">
         <input type="text" class="form form-control" id="url"/>
       </div>
-      
-    </div>    
 
-    <script>
-      
-      const video = require('./js/video.js')
+      <div class="col-lg-3 col-sm-3">
+        <button class="btn btn-danger" onclick="videoInfo();">Pesquisar</button>
+      </div>
+    </div>  
+    <br/>
 
-      window.onload = function(){
-        document.getElementById("url").onkeyup = function(){
-          video.videoInfo('CoPkEJ1spZs');
-        };
-      };
-    </script>
+    <div class="row">
+      <div class="col-lg-12 col-sm-12" id="info">
+        
+        <hr/>
+        <h5 id="title"></h5>
+        <img id="videoImg"/>
+        <br/>
+
+      </div>
+    </div>
+
+    <script src="./js/index.js"></script>
   </body>
 </html>

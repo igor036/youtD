@@ -5,7 +5,7 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
-const $ = require('jquery')
+
 
 let mainWindow
 
@@ -20,7 +20,7 @@ function createWindow () {
     slashes: true
   }))
 
-  // Open the DevTools.
+  //Open the DevTools.
   mainWindow.webContents.openDevTools()
 
   // Emitted when the windclow is closed.
