@@ -14,23 +14,15 @@ module.exports = {
         });
     },
 
-    downloadVideo: function(url,quality,name,process) {
+    downloadVideo: function(url,quality,name,onData) {
 
         let video = ytdl(url, { filter: (format) => format.resolution === quality.resolution });
         video.pipe(fs.createWriteStream(this.path+name+'.'+quality.container));
         video.on('response',(res)=> {
-
-            let totalSize =  res.headers['content-length'],dataRead = 0;
-
+           
+            let totalSize =  res.headers['content-length'];
             res.on('data',(data) => {
-                
-                dataRead += data.length;
-                let percent = (dataRead*100) / totalSize;
-
-                process.attr("aria-valuenow",parseInt(percent));
-                process.html(parseInt(percent)+"%");
-                process.css("width",parseInt(percent)+"%");
-
+                onData(data,totalSize);
             });
         });
     }

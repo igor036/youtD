@@ -4,6 +4,7 @@
  */
 const video = require('./js/video.js')
 const $ = require('jquery')
+const notifier = require('node-notifier');
 
 var urlText;
 var infoDiv;
@@ -20,22 +21,24 @@ function addLinkToDownload(info,i) {
         link.textContent = quality.quality +"("+info.fmt_list[i][1]+")";
         link.onclick = ()=> {
 
-
-            let btnOpen = document.createElement('button');
-            btnOpen.className = 'btn btn-success';
-            btnOpen.innerHTML = "Abrir Pasta";
-            btnOpen.disabled  = true;
-            btnOpen.onclick = () => {
-                require('child_process').exec('start "" "'+path+'"');
-            };
-
             let processDiv = $("#process");
+
             processDiv.append(info.title);
             processDiv.append("<br/>");
             processDiv.append('<div class="progress"><div id="process-'+PID+'" class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>');
-            processDiv.append(btnOpen);
+            
+            let process = $("#process-"+(PID++));
+            let dataRead = 0;
 
-            video.downloadVideo(url,info.formats[i],info.title,$("#process-"+(PID++)));
+            video.downloadVideo(url,info.formats[i],info.title,(data,totalSize)=>{
+                
+                    dataRead += data.length;
+                    let percent = (dataRead*100) / totalSize;
+    
+                    process.attr("aria-valuenow",parseInt(percent));
+                    process.html(parseInt(percent)+"%");
+                    process.css("width",parseInt(percent)+"%");
+            });
         };
 
         infoDiv.append("<br/>");
@@ -89,7 +92,20 @@ function videoInfo() {
 
 //init
 $(function(){
+
     urlText = $("#url");
     infoDiv = $("#info");
     video.path="C:\\Users\\igor.lima\\Downloads\\";
+
+    /*
+    notifier.notify({
+  'title': 'David Walsh Blog',
+  'subtitle': 'Daily Maintenance',
+  'message': 'Go approve comments in moderation!',
+  'icon': 'dwb-logo.png',
+  'contentImage': 'blog.png',
+  'sound': 'ding.mp3',
+  'wait': true
+});
+     */
 });
