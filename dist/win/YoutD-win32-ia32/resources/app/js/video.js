@@ -16,6 +16,9 @@ module.exports = {
 
     downloadVideo: function(url,quality,name,onData,end) {
 
+        while(name.indexOf('/') != -1)
+            name = name.replace('/','-');
+
         let video = ytdl(url, { filter: (format) => format.resolution === quality.resolution });
         video.pipe(fs.createWriteStream(this.path+name+'.'+quality.container));
         video.on('response',(res)=> {
