@@ -19,14 +19,18 @@ function addLinkToDownload(info,i) {
         let link = document.createElement("a");
 
         link.textContent = quality.quality +"("+info.fmt_list[i][1]+")";
+        link.href = "#";
+
         link.onclick = ()=> {
 
             let processDiv = $("#process");
 
-            processDiv.append(info.title);
+            processDiv.append('<span>'+info.title+'</span>');
             processDiv.append("<br/>");
             processDiv.append('<div class="progress"><div id="process-'+PID+'" class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>');
             
+            $("#clearBt").show('fast');
+
             let process = $("#process-"+(PID++));
             let dataRead = 0;
 
@@ -38,6 +42,16 @@ function addLinkToDownload(info,i) {
                     process.attr("aria-valuenow",parseInt(percent));
                     process.html(parseInt(percent)+"%");
                     process.css("width",parseInt(percent)+"%");
+            }, ()=>{
+                notifier.notify({
+                    'title': 'Download Concluído',
+                    'subtitle': 'Concluído!',
+                    'message': info.title,
+                    'icon': 'dwb-logo.png',
+                    'contentImage': 'blog.png',
+                    'sound': 'ding.mp3',
+                    'wait': true
+                  });
             });
         };
 
@@ -90,22 +104,31 @@ function videoInfo() {
     }
 }
 
+
 //init
 $(function(){
 
+    //set download path
+    let os = require('os');
+
+    //windows
+    if (os.type() == "Windows_NT") 
+        video.path="C:\\Users\\"+os.userInfo().username+"\\Downloads\\";
+
+    //end
+
+    //get const component's
     urlText = $("#url");
     infoDiv = $("#info");
-    video.path="C:\\Users\\igor.lima\\Downloads\\";
+    //end
 
-    /*
-    notifier.notify({
-  'title': 'David Walsh Blog',
-  'subtitle': 'Daily Maintenance',
-  'message': 'Go approve comments in moderation!',
-  'icon': 'dwb-logo.png',
-  'contentImage': 'blog.png',
-  'sound': 'ding.mp3',
-  'wait': true
-});
-     */
+    //clear progress download
+    $("#clearBt").click(()=>{
+        let process = $("#process");
+        process.find('br').remove(); 
+        process.find('div').remove();  
+        process.find('span').remove();   
+        $("#clearBt").hide('fast');
+    });
+    //end
 });

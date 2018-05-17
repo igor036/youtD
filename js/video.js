@@ -14,7 +14,7 @@ module.exports = {
         });
     },
 
-    downloadVideo: function(url,quality,name,onData) {
+    downloadVideo: function(url,quality,name,onData,end) {
 
         let video = ytdl(url, { filter: (format) => format.resolution === quality.resolution });
         video.pipe(fs.createWriteStream(this.path+name+'.'+quality.container));
@@ -24,6 +24,8 @@ module.exports = {
             res.on('data',(data) => {
                 onData(data,totalSize);
             });
+
+            res.on('end',end);
         });
     }
 };

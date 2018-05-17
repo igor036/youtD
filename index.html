@@ -1,48 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>YoutD</title>
 
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script src="node_modules/jquery/dist/jquery.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <title>YoutD</title>
 
-    <link rel="stylesheet" href="css/resset.css">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src="node_modules/jquery/dist/jquery.js"></script>
 
-  </head>
-  <body class="container">
+  <link rel="stylesheet" href="css/resset.css">
 
-    <br/>
+</head>
 
-    <img src="./img/load.gif" id="load"/>
+<body class="container">
 
-    <div class="row" id="search">
-      <div class="col-lg-6 col-sm-6">
-        <input type="text" class="form form-control" id="url"/>
-      </div>
+  <br/>
 
-      <div class="col-lg-3 col-sm-3">
-        <button class="btn btn-danger" onclick="videoInfo();">Pesquisar</button>
-      </div>
-    </div>  
-    <br/>
+  <div class="row">
+      <img src="./img/load.gif" class="col-lg-10 col-sm-10" id="load" />
+  </div>
 
-    <div class="row">
-      <div class="col-lg-12 col-sm-12" id="info">
-        
-        <hr/>
-        <h5 id="title"></h5>
-        <img id="videoImg"/>
-        <br/>
-      </div>
+  <div class="row" id="search">
+
+    <div class="col-lg-6 col-sm-6">
+      <input type="text" class="form form-control" id="url" />
     </div>
 
-    <br/>
-    <div class="row">
-      <div class="col-lg-6 col-sm-6" id="process">
-      </div>
+    <div class="col-lg-3 col-sm-3">
+      <button class="btn btn-danger" onclick="videoInfo();">Pesquisar</button>
     </div>
+  </div>
+  <br/>
 
-    <script src="./js/index.js"></script>
-  </body>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12" id="info">
+
+      <hr/>
+      <h5 id="title"></h5>
+      <img id="videoImg" />
+      <br/>
+    </div>
+  </div>
+
+  <br/>
+  <div class="row">
+    <div class="col-lg-6 col-sm-6" id="process">
+    </div>
+  </div>
+  <br/>
+  <div class="row">
+    <div class="col-lg-6 col-sm-6">
+      <button class="btn btn-dark" style="display: none;" id="clearBt">Limpar</button>
+    </div>
+  </div>
+
+  <script src="./js/index.js"></script>
+</body>
+
 </html>
