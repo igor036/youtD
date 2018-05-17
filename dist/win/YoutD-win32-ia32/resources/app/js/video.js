@@ -4,12 +4,12 @@
  */
 const fs = require('fs');
 const ytdl = require('ytdl-core');
-const regex_id = /v=([\]\[!"#$%'()*+,.\/:;<=>?@\^_`{|}~-\w]*)/;
 
 module.exports = {
     video: NaN,
+    regex_id: /v=([\]\[!"#$%'()*+,.\/:;<=>?@\^_`{|}~-\w]*)/,
     videoInfo: function(url, sucess) {
-        ytdl.getInfo(url.match(regex_id)[1]).then(info => {
+        ytdl.getInfo(url.match(this.regex_id)[1]).then(info => {
             sucess(info);
         });
     },

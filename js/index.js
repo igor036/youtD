@@ -82,10 +82,9 @@ function videoInfo() {
       
         video.videoInfo(url, (info) => {
             
-            if (info.related_videos[1].playlist_iurlmq)
-                $("#videoImg").attr('src',info.related_videos[1].playlist_iurlmq);
-            else
-                $("#videoImg").attr('src',info.related_videos[1].iurlhq);
+            console.log(url.match(video.regex_id)[1]);
+            
+            $("#videoImg").attr('src', 'https://img.youtube.com/vi/'+url.match(video.regex_id)[1]+'/mqdefault.jpg' );
 
 
             $("#title").html(info.title);
@@ -98,7 +97,7 @@ function videoInfo() {
 
         });
 
-    }catch(e){
+    } catch(e) {
 
         loadGif.hide('hide');
         search.show('fast');

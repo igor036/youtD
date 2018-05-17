@@ -81,8 +81,13 @@ function videoInfo() {
         loadGif.show('fast');
       
         video.videoInfo(url, (info) => {
-    
-            $("#videoImg").attr('src',info.related_videos[1].playlist_iurlmq);
+            
+            if (info.related_videos[1].playlist_iurlmq)
+                $("#videoImg").attr('src',info.related_videos[1].playlist_iurlmq);
+            else
+                $("#videoImg").attr('src',info.related_videos[1].iurlhq);
+
+
             $("#title").html(info.title);
     
             addLinkToDownload(info,0);
