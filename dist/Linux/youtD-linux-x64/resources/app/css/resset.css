@@ -1,0 +1,13 @@
+
+body {
+    background-color: #2e2e2e;
+    color: white;
+}
+
+#load {
+    display: none;
+}
+
+#videoImg {
+    border-radius: 5px;
+}

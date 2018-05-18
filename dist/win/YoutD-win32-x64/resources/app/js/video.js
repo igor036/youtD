@@ -4,6 +4,7 @@
  */
 const fs = require('fs');
 const ytdl = require('ytdl-core');
+const files = {};
 
 module.exports = {
     video: NaN,
@@ -13,16 +14,16 @@ module.exports = {
             sucess(info);
         });
     },
-
     downloadVideo: function(url,quality,name,onData,end) {
-
-        while(name.indexOf('/') != -1)
-            name = name.replace('/','-');
-
+        
+        let file = fs.createWriteStream(this.path+name+'.'+quality.container);
         let video = ytdl(url, { filter: (format) => format.resolution === quality.resolution });
-        video.pipe(fs.createWriteStream(this.path+name+'.'+quality.container));
+        
+        files[this.path+name+'.'+quality.container] = file;
+
+        video.pipe(file);
         video.on('response',(res)=> {
-           
+
             let totalSize =  res.headers['content-length'];
             res.on('data',(data) => {
                 onData(data,totalSize);
@@ -30,5 +31,12 @@ module.exports = {
 
             res.on('end',end);
         });
+    },
+    stop: function(name, onDelete) {
+
+        files[this.path+name].destroy();
+        fs.unlink(this.path+name);
+        onDelete();
+        delete files[this.path+name];
     }
 };

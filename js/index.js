@@ -2,8 +2,8 @@
  *Author: Igor Joaquim dos Santos Lima
  *Email: igorjoquim.pg@gmail.com
  */
-const video = require('./js/video.js')
-const $ = require('jquery')
+const video = require('./js/video.js');
+const $ = require('jquery');
 const notifier = require('node-notifier');
 
 var urlText;
@@ -25,17 +25,34 @@ function addLinkToDownload(info,i) {
         link.onclick = ()=> {
 
             let processDiv = $("#process");
+            let TEMP_PID = PID;
 
-            processDiv.append('<span>'+info.title+'</span>');
+            processDiv.append('<span id="sp-proc-'+PID+'">'+info.title+'</span>');
             processDiv.append("<br/>");
-            processDiv.append('<div class="progress"><div id="process-'+PID+'" class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>');
+            processDiv.append('<div class="progress"><div id="process-'+PID+'" class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div><a href="#" id="cancel-proc-'+PID+'" name="'+PID+'">Cancelar<br/></a>');
 
+            //cancel download
+            $("#cancel-proc-"+TEMP_PID).click(()=>{
+                
+                video.stop(name+'.'+quality.container,(event)=> {
+                    $("#sp-proc-"+TEMP_PID).remove();
+                    $("#cancel-proc-"+TEMP_PID).remove();
+                    $("#process-"+TEMP_PID).remove();
+                });
+            });
+
+            //show bt of hide all process download
             $("#clearBt").show('fast');
 
             let process = $("#process-"+(PID++));
             let dataRead = 0;
+            let name = info.title;
 
-            video.downloadVideo(url,info.formats[i],info.title,(data,totalSize)=>{
+            while(name.indexOf('/') != -1)
+                name = name.replace('/','-');
+
+            //download process
+            video.downloadVideo(url,info.formats[i],name,(data,totalSize)=>{
 
                     dataRead += data.length;
                     let percent = (dataRead*100) / totalSize;
@@ -43,7 +60,9 @@ function addLinkToDownload(info,i) {
                     process.attr("aria-valuenow",parseInt(percent));
                     process.html(parseInt(percent)+"%");
                     process.css("width",parseInt(percent)+"%");
-            }, ()=>{
+
+            }, ()=> {
+                $("#cancel-proc-"+TEMP_PID).remove();
                 notifier.notify({
                     'title': 'Download Concluído',
                     'subtitle': 'Concluído!',
@@ -53,7 +72,9 @@ function addLinkToDownload(info,i) {
                     'sound': 'ding.mp3',
                     'wait': true
                   });
-                  notifier.on('click',openFolder());
+                  notifier.on('click',()=> {
+                      openFolder()
+                });
             });
         };
 
