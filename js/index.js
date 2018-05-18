@@ -10,12 +10,13 @@ var urlText;
 var infoDiv;
 var url;
 var PID = 0;
+var openFolder;
 
 function addLinkToDownload(info,i) {
 
     if (info.fmt_list[i]) {
 
-        let quality = info.formats[i]; 
+        let quality = info.formats[i];
         let link = document.createElement("a");
 
         link.textContent = quality.quality +"("+info.fmt_list[i][1]+")";
@@ -28,17 +29,17 @@ function addLinkToDownload(info,i) {
             processDiv.append('<span>'+info.title+'</span>');
             processDiv.append("<br/>");
             processDiv.append('<div class="progress"><div id="process-'+PID+'" class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div>');
-            
+
             $("#clearBt").show('fast');
 
             let process = $("#process-"+(PID++));
             let dataRead = 0;
 
             video.downloadVideo(url,info.formats[i],info.title,(data,totalSize)=>{
-                
+
                     dataRead += data.length;
                     let percent = (dataRead*100) / totalSize;
-    
+
                     process.attr("aria-valuenow",parseInt(percent));
                     process.html(parseInt(percent)+"%");
                     process.css("width",parseInt(percent)+"%");
@@ -52,6 +53,7 @@ function addLinkToDownload(info,i) {
                     'sound': 'ding.mp3',
                     'wait': true
                   });
+                  notifier.on('click',openFolder());
             });
         };
 
@@ -68,29 +70,29 @@ function clearInfoDiv(){
 }
 
 function videoInfo() {
-    
+
     let loadGif = $("#load");
     let search  = $("#search");
 
     clearInfoDiv();
 
     try {
-    
+
         url = urlText.val();
         search.hide('fast');
         loadGif.show('fast');
-      
+
         video.videoInfo(url, (info) => {
-            
+
             console.log(url.match(video.regex_id)[1]);
-            
+
             $("#videoImg").attr('src', 'https://img.youtube.com/vi/'+url.match(video.regex_id)[1]+'/mqdefault.jpg' );
 
 
             $("#title").html(info.title);
-    
+
             addLinkToDownload(info,0);
-    
+
             loadGif.hide('hide');
             search.show('fast');
 
@@ -116,9 +118,21 @@ $(function(){
     let os = require('os');
 
     //windows
-    if (os.type() == "Windows_NT") 
+    if (os.type() == "Windows_NT") {
         video.path="C:\\Users\\"+os.userInfo().username+"\\Downloads\\";
+        openFolder = ()=> {
+          require('child_process').exec('start "" "'+video.path+'"');
+        };
+    }
+    //Linux
+    else if (os.type() == "Linux") {
+      video.path="/home/"+os.userInfo().username+"/Downloads/";
+      openFolder = ()=> {
+        require('child_process').exec('nautilus '+video.path);
+      };
+    }
 
+    $("#path").html(video.path);
     //end
 
     //get const component's
@@ -129,10 +143,11 @@ $(function(){
     //clear progress download
     $("#clearBt").click(()=>{
         let process = $("#process");
-        process.find('br').remove(); 
-        process.find('div').remove();  
-        process.find('span').remove();   
+        process.find('br').remove();
+        process.find('div').remove();
+        process.find('span').remove();
         $("#clearBt").hide('fast');
     });
     //end
+
 });

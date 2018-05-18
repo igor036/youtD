@@ -21,7 +21,7 @@ function createWindow () {
   }))
 
   //Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the windclow is closed.
   mainWindow.on('closed', function () {
@@ -43,4 +43,3 @@ app.on('activate', function () {
     createWindow()
   }
 })
-

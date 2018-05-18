@@ -22,7 +22,7 @@ module.exports = {
         let video = ytdl(url, { filter: (format) => format.resolution === quality.resolution });
         video.pipe(fs.createWriteStream(this.path+name+'.'+quality.container));
         video.on('response',(res)=> {
-           
+
             let totalSize =  res.headers['content-length'];
             res.on('data',(data) => {
                 onData(data,totalSize);
